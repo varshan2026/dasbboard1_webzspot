@@ -1,4 +1,4 @@
-import Dashboard from "./components/dashbosrd";
+import Dashboard from "./components/dashbosrd.jsx";
 
 function App() {
   return (
