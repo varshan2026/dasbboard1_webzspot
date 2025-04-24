@@ -1,5 +1,6 @@
 import { SquarePlus } from 'lucide-react';
 import { Ban } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 function Dashboard(){
@@ -12,8 +13,11 @@ function Dashboard(){
   });
 
   const[form, setForm] = useState(false)
-
   const[saveData, setsaveData] = useState('');
+  const[activeTab, setactiveTab] = useState(0);
+  const tab = ['AC','Non AC', 'VIP Loung', 'Resolved'];
+  const[activeFloor, setactiveFloor] = useState(0);
+  const floor = ['Ground Floor', '1st Floor', '2nd Floor', 'Top Floor'];
 
   const handleChange = (e) => {
     const{name, value} = e.target
@@ -21,7 +25,6 @@ function Dashboard(){
       ...prev, [name]:value
     }))
   }
-
   
   const generateTableNumber = () => {
 
@@ -66,15 +69,21 @@ function Dashboard(){
   
   const dataShow = () => {
 
-    setsaveData((prev) => [...prev, {
-      floor: formData.floor,
-      zone: formData.zone,
-      seatingCapacity: formData.seatingCapacity,
-      tableNumber: formData.tableNumber,
-      tableStatus: formData.tableStatus
-    }]);    
-
-    console.log(saveData)
+    if (!formData.floor || !formData.zone || !formData.seatingCapacity || !formData.tableStatus) {
+      alert("Please fill all the required fields.");
+      return;
+    }
+    else{
+      setsaveData((prev) => [...prev, {
+        floor: formData.floor,
+        zone: formData.zone,
+        seatingCapacity: formData.seatingCapacity,
+        tableNumber: formData.tableNumber,
+        tableStatus: formData.tableStatus
+      }]);    
+  
+      console.log(saveData)
+    }
 
     setformData(
       {
@@ -88,7 +97,7 @@ function Dashboard(){
   }
 
   return (
-    <div className="flex flex-wrap lg:flex-nowrap gap-4 p-4">
+    <div className="flex flex-wrap lg:flex-nowrap gap-4 px-5 py-4">
       <section className="w-[70%] flex flex-col gap-y-4">
         <div className="p-5 border border-[#EDEFF1] rounded-2xl">
           <p className="text-lg font-medium pb-4">Table Metrics</p>
@@ -132,8 +141,48 @@ function Dashboard(){
             </p>
           </div>
         ) : (
-          <div className='h-[80vh] overflow-y-scroll'>
-            <div className='p-5 flex flex-wrap gap-15'>
+          <div className='flex flex-col gap-y-5'>
+            <div className='w-120 flex justify-between border border-[#EDEDED] rounded-xl'>
+            {
+              floor.map((item, index) => (
+                <p
+                  key={index}
+                  onClick={() => setactiveFloor(index)}
+                  className={`cursor-pointer p-4 transition-transform duration-200 ease-in-out ${
+                    activeFloor === index ? 'text-[#2E2A40] bg-[#EDEDED] rounded-xl':'text-[#84818A]'
+                  }`}
+                >
+                  {item}
+                </p>
+              ))
+            }
+            </div>
+
+            <div
+              className='flex gap-x-10 px-2'
+            >
+              {
+                tab.map((item, index) => (
+                  <p 
+                    key={index}
+                    onClick={() => setactiveTab(index)}
+                    className={`cursor-pointer ${
+                      activeTab === index?'text-[#C52031] underline underline-offset-8'
+                      :'text-[#84818A]'
+                    }`}
+                  >{item}</p>
+                ))
+              }
+            </div>
+
+            <div className='border border-[#EDEDED] w-70 py-2.5 px-2.5 rounded-lg flex gap-x-2'>
+              <Search color='#92959E'/>
+              <input
+                className='focus:outline-0 w-full' 
+              />
+            </div>
+
+            <div className=' flex flex-wrap gap-x-18.5'>
             {saveData.map((item, index) => (
               <div className='border border-gray-300 p-8 rounded-xl'>
                 <div
@@ -282,7 +331,7 @@ function Dashboard(){
                 </div>
               </div>
 
-              <div className="flex gap-x-2.5 mt-2">
+              <div className="flex gap-x-2.5 mt-3.5">
                 <button
                   className="p-2.5 text-white bg-[#C52031] font-medium text-base w-[95%] rounded-sm"
                   onClick={dataShow}
@@ -353,7 +402,7 @@ function Dashboard(){
             <div className="flex justify-between gap-x-4">
               <div className="flex flex-col gap-3 w-[40%]">
                 <label className="text-base font-medium">Table Layout</label>
-                <div className="border border-[#F2F2F2] rounded-sm p-5 text-sm text-[#64748B99]">
+                <div className="border border-[#F2F2F2] rounded-sm p-5 text-sm text-[#64748B99] h-30">
                   <p className="text-center">
                     No <br /> Data to Show
                   </p>
@@ -362,7 +411,7 @@ function Dashboard(){
 
               <div className="flex flex-col gap-3 w-[60%]">
                 <label className="text-base font-medium">Table QR</label>
-                <div className="border border-[#F2F2F2] rounded-sm p-5 text-sm text-[#64748B99]">
+                <div className="border border-[#F2F2F2] rounded-sm p-5 text-sm text-[#64748B99] h-30">
                   <p className="text-center">
                     No <br /> Data to Show
                   </p>
