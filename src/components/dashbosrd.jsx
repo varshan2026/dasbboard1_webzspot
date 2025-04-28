@@ -2,6 +2,7 @@ import { SquarePlus } from 'lucide-react';
 import { Ban } from 'lucide-react';
 import { Search } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { QRCodeCanvas } from "qrcode.react";
 
 function Dashboard(){
   const[formData, setformData] = useState({
@@ -141,65 +142,61 @@ function Dashboard(){
             </p>
           </div>
         ) : (
-          <div className='flex flex-col gap-y-5'>
-            <div className='w-120 flex justify-between border border-[#EDEDED] rounded-xl'>
-            {
-              floor.map((item, index) => (
+          <div className="flex flex-col gap-y-5">
+            <div className="w-120 flex justify-between border border-[#EDEDED] rounded-xl">
+              {floor.map((item, index) => (
                 <p
                   key={index}
                   onClick={() => setactiveFloor(index)}
                   className={`cursor-pointer p-4 transition-transform duration-200 ease-in-out ${
-                    activeFloor === index ? 'text-[#2E2A40] bg-[#EDEDED] rounded-xl':'text-[#84818A]'
+                    activeFloor === index
+                      ? "text-[#2E2A40] bg-[#EDEDED] rounded-xl"
+                      : "text-[#84818A]"
                   }`}
                 >
                   {item}
                 </p>
-              ))
-            }
+              ))}
             </div>
 
-            <div
-              className='flex gap-x-10 px-2'
-            >
-              {
-                tab.map((item, index) => (
-                  <p 
-                    key={index}
-                    onClick={() => setactiveTab(index)}
-                    className={`cursor-pointer ${
-                      activeTab === index?'text-[#C52031] underline underline-offset-8'
-                      :'text-[#84818A]'
-                    }`}
-                  >{item}</p>
-                ))
-              }
-            </div>
-
-            <div className='border border-[#EDEDED] w-70 py-2.5 px-2.5 rounded-lg flex gap-x-2'>
-              <Search color='#92959E'/>
-              <input
-                className='focus:outline-0 w-full' 
-              />
-            </div>
-
-            <div className=' flex flex-wrap gap-x-18.5'>
-            {saveData.map((item, index) => (
-              <div className='border border-gray-300 p-8 rounded-xl'>
-                <div
+            <div className="flex gap-x-10 px-2">
+              {tab.map((item, index) => (
+                <p
                   key={index}
-                  className="relative w-20 h-20 bg-[#60A06C] rounded-xl flex items-center justify-center text-white text-lg font-semibold"
+                  onClick={() => setactiveTab(index)}
+                  className={`cursor-pointer ${
+                    activeTab === index
+                      ? "text-[#C52031] underline underline-offset-8"
+                      : "text-[#84818A]"
+                  }`}
                 >
-                  <div className="absolute top-[-15px] left-1/2 -translate-x-1/2 w-10 h-2.5 bg-[#60A06C] rounded-full"></div>
-                  <div className="absolute bottom-[-15px] left-1/2 -translate-x-1/2 w-10 h-2.5 bg-[#60A06C] rounded-full"></div>
-                  <div className="absolute left-[-15px] top-1/2 -translate-y-1/2 w-2.5 h-10 bg-[#60A06C] rounded-full"></div>
-                  <div className="absolute right-[-15px] top-1/2 -translate-y-1/2 w-2.5 h-10 bg-[#60A06C] rounded-full"></div>
-                  <p className="text-sm">{item.tableNumber}</p>
+                  {item}
+                </p>
+              ))}
+            </div>
+
+            <div className="border border-[#EDEDED] w-70 py-2.5 px-2.5 rounded-lg flex gap-x-2">
+              <Search color="#92959E" />
+              <input className="focus:outline-0 w-full" />
+            </div>
+
+            <div className=" flex flex-wrap gap-x-18.5">
+              {saveData.map((item, index) => (
+                <div className="border border-gray-300 p-8 rounded-xl">
+                  <div
+                    key={index}
+                    className="relative w-20 h-20 bg-[#60A06C] rounded-xl flex items-center justify-center text-white text-lg font-semibold"
+                  >
+                    <div className="absolute top-[-15px] left-1/2 -translate-x-1/2 w-10 h-2.5 bg-[#60A06C] rounded-full"></div>
+                    <div className="absolute bottom-[-15px] left-1/2 -translate-x-1/2 w-10 h-2.5 bg-[#60A06C] rounded-full"></div>
+                    <div className="absolute left-[-15px] top-1/2 -translate-y-1/2 w-2.5 h-10 bg-[#60A06C] rounded-full"></div>
+                    <div className="absolute right-[-15px] top-1/2 -translate-y-1/2 w-2.5 h-10 bg-[#60A06C] rounded-full"></div>
+                    <p className="text-sm">{item.tableNumber}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
             </div>
           </div>
-          
         )}
       </section>
 
@@ -400,21 +397,35 @@ function Dashboard(){
             </div>
 
             <div className="flex justify-between gap-x-4">
-              <div className="flex flex-col gap-3 w-[40%]">
+              <div className="flex flex-col gap-3 w-[50%]">
                 <label className="text-base font-medium">Table Layout</label>
-                <div className="border border-[#F2F2F2] rounded-sm p-5 text-sm text-[#64748B99] h-30">
-                  <p className="text-center">
-                    No <br /> Data to Show
-                  </p>
+                <div className="border border-[#F2F2F2] rounded-sm text-sm text-[#64748B99] h-30 flex justify-center items-center">
+                  {formData === "" ? (
+                    <p className="text-center">
+                      No <br /> Data to Show
+                    </p>
+                  ) : (
+                    <QRCodeCanvas value={formData} size={96} />
+                  )}
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3 w-[60%]">
+              <div className="flex flex-col gap-3 w-[50%]">
                 <label className="text-base font-medium">Table QR</label>
                 <div className="border border-[#F2F2F2] rounded-sm p-5 text-sm text-[#64748B99] h-30">
-                  <p className="text-center">
-                    No <br /> Data to Show
-                  </p>
+                  {formData ? (
+                    <p className="text-center">
+                      No <br /> Data to Show
+                    </p>
+                  ) : (
+                    <div className="relative w-20 h-20 bg-[#60A06C] rounded-xl flex items-center justify-center text-white text-lg font-semibold">
+                      <div className="absolute top-[-15px] left-1/2 -translate-x-1/2 w-10 h-2.5 bg-[#60A06C] rounded-full"></div>
+                      <div className="absolute bottom-[-15px] left-1/2 -translate-x-1/2 w-10 h-2.5 bg-[#60A06C] rounded-full"></div>
+                      <div className="absolute left-[-15px] top-1/2 -translate-y-1/2 w-2.5 h-10 bg-[#60A06C] rounded-full"></div>
+                      <div className="absolute right-[-15px] top-1/2 -translate-y-1/2 w-2.5 h-10 bg-[#60A06C] rounded-full"></div>
+                      <p className="text-sm">{formData.tableNumber}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
